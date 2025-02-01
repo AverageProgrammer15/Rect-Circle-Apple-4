@@ -106,7 +106,7 @@ function draw() {
     for (let i = 0; i < to_number; i++) {
       Rng = Math.floor(Math.random() * 7);
       x = Rng * 700;
-      y = Math.floor(Math.random() * 4) * 400;
+      y = Math.floor(Math.random() * 4);
       rect(x, y, 55, 40);
       speak_data = "Drawn a rectangle";
       speak();
