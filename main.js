@@ -19,7 +19,7 @@ Apple = "apple.png";
 function setup() {
   screen_width = window.innerWidth;
   screen_height = window.innerHeight;
-  canvas = createCanvas(screen_width, screen_height - 150);
+  canvas = createCanvas(screen_width, screen_height - 50);
   canvas.center();
   console.log("Canvas created and loaded.");
   background(220);
