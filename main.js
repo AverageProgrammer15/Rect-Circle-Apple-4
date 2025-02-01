@@ -64,6 +64,8 @@ recognition.onresult = function(event) {
 
  document.getElementById("status").innerHTML = "The speech has been recognized: " + content; 
 
+ to_number = Number(content)
+
  if (content == "circle"){
   draw_circle = "set";
   console.log("Set circle");
@@ -82,8 +84,10 @@ recognition.onresult = function(event) {
   console.log("Script should be running: apple")
  }
 
+  recognition.stop()
+
  
- to_number = Number(content)
+ 
 
  
 }
