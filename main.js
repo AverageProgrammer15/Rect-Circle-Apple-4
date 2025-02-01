@@ -15,6 +15,7 @@ screen_width = 0;
 
 Apple = "apple.png";
 
+// Set up canvas and image loading
 function setup() {
   screen_width = window.innerWidth;
   screen_height = window.innerHeight;
@@ -38,6 +39,7 @@ function preload() {
   }
 }
 
+// Start listening to speech input
 function start() {
   document.getElementById("status").innerHTML = "System is listening, please speak";
   recognition.start();
@@ -49,35 +51,32 @@ recognition.onresult = function (event) {
   console.log("Received:", content);
   document.getElementById("status").innerHTML = "The speech has been recognized: " + content;
 
-  // Reset the canvas on each new command for fresh drawings
-  background(220); // Clear canvas
-
+  // Check what the user said and set flags accordingly
   if (content === "circle") {
     draw_circle = "set";
-    console.log("Set circle");
-    draw();
+    draw_apple = draw_rectangle = ""; // Reset the other drawing states
+    draw(); // Draw circle
   } else if (content === "rectangle") {
     draw_rectangle = "set";
-    console.log("Set rectangle");
-    draw();
+    draw_apple = draw_circle = ""; // Reset the other drawing states
+    draw(); // Draw rectangle
   } else if (content === "apple") {
     draw_apple = "set";
-    console.log("Set apple");
-    draw();
+    draw_circle = draw_rectangle = ""; // Reset the other drawing states
+    draw(); // Draw apple
   } else {
-    // Check if the content is a valid number
+    // Handle drawing numbers
     to_number = parseInt(content);
     if (isNaN(to_number)) {
-      to_number = 1; // Default to 1 if not a valid number
+      to_number = 1; // Default to 1 if it's not a number
     }
     console.log("Number of shapes to draw:", to_number);
   }
 
-  // Restart the speech recognition to listen for the next command
-  recognition.stop();
-  
+  // Do not immediately restart the recognition here — let it process naturally
 };
 
+// Draw based on the state
 function draw() {
   let Rng;
   x = 0;
@@ -85,40 +84,38 @@ function draw() {
 
   if (draw_apple === "set") {
     for (let i = 0; i < to_number; i++) {
-      Rng = Math.floor(Math.random() * 7); // Increase random factor for more spread
+      Rng = Math.floor(Math.random() * 7);
       x = Rng * 700;
-      y = Math.floor(Math.random() * 4) * 400; // Change y for more variation
-
+      y = Math.floor(Math.random() * 4) * 400;
       image(apple, x, y, 50, 50);
       speak_data = "Drawn an apple";
       speak();
     }
-    draw_apple = "";
+    draw_apple = ""; // Reset state
   } else if (draw_circle === "set") {
     for (let i = 0; i < to_number; i++) {
       Rng = Math.floor(Math.random() * 7);
       x = Rng * 700;
       y = Math.floor(Math.random() * 4) * 400;
-
-      ellipse(x, y, 50, 50); // Use ellipse instead of circle to control size
+      ellipse(x, y, 50, 50);
       speak_data = "Drawn a circle";
       speak();
     }
-    draw_circle = "";
+    draw_circle = ""; // Reset state
   } else if (draw_rectangle === "set") {
     for (let i = 0; i < to_number; i++) {
       Rng = Math.floor(Math.random() * 7);
       x = Rng * 700;
       y = Math.floor(Math.random() * 4) * 400;
-
       rect(x, y, 55, 40);
       speak_data = "Drawn a rectangle";
       speak();
     }
-    draw_rectangle = "";
+    draw_rectangle = ""; // Reset state
   }
 }
 
+// Speak feedback to the user
 function speak() {
   var synth = window.speechSynthesis;
   var utterThis = new SpeechSynthesisUtterance(speak_data);
@@ -126,4 +123,5 @@ function speak() {
   synth.speak(utterThis);
   speak_data = "";
 }
+
 
